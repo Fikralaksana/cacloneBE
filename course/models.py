@@ -5,7 +5,7 @@ from django.db import models
 class Course(models.Model):
     LANGUAGES=(("python","python"),)
     name=models.CharField(max_length=255)
-    language=models.CharField(choices=LANGUAGES)
+    language=models.CharField(choices=LANGUAGES,max_length=50)
 
 
 class Lesson(models.Model):
