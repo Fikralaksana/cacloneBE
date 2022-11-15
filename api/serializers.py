@@ -1,4 +1,4 @@
-from .models import Course,Lesson
+from .models import Course,Lesson,Code,Owner
 from rest_framework import serializers
 
 
@@ -12,3 +12,12 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['id','name','language','lessons']
+
+class OwnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Owner
+        fields=["id","token"]
+class CodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Code
+        fields = ["id","owner","code","lesson"]
