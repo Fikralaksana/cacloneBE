@@ -1,4 +1,5 @@
 import pathlib
+import subprocess
 from .models import Course,Lesson,Owner,Code
 from django.contrib.sessions.models import Session
 from django.conf import settings
@@ -55,6 +56,13 @@ class CodeViewSet(viewsets.ModelViewSet):
             f.write(request.data.get('code_string'))
 
         return super().partial_update(request, *args, **kwargs)
+
+    def finalize_response(self, request:Request, response:Response, *args, **kwargs):
+        if request.method=="PATCH":
+            path=self.get_object().code.path
+            shell=subprocess.run(["python",path],capture_output=True)
+            response.data['output']=shell.stdout
+        return super().finalize_response(request, response, *args, **kwargs)
 
 
 
