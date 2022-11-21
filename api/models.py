@@ -11,7 +11,7 @@ def getUploadPath(instance,filename):
     return f'code/{instance.owner.session_key}/{instance.lesson.id}/{filename}'
 
 class Course(models.Model):
-    LANGUAGES=(("python","python"),)
+    LANGUAGES=(("python","python"),('web frontend','web frontend'))
     name=models.CharField(max_length=255)
     language=models.CharField(choices=LANGUAGES,max_length=50)
     def __str__(self) -> str:
