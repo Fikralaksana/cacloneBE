@@ -41,9 +41,9 @@ class CodeView(View):
         file=BytesIO(b"halooo")
         owner=owner_qset.last()
         lessons_qset=owner.codes.filter(lesson__id=lesson)
-        if Lesson.objects.filter(id=lesson).first().course.language.first().type:
+        if Lesson.objects.filter(id=lesson).first().course.language.first().type=="console":
             file.name="main.py"
-        elif Lesson.objects.filter(id=lesson).first().course.language.first().type:
+        elif Lesson.objects.filter(id=lesson).first().course.language.first().type=="browser":
             file.name="index.html"
         file=File(file)
         if len(lessons_qset)==0:   
