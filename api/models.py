@@ -11,13 +11,16 @@ def getUploadPath(instance,filename):
     return f'code/{instance.owner.session_key}/{instance.lesson.id}/{filename}'
 
 class Course(models.Model):
-    LANGUAGES=(("python","python"),('web frontend','web frontend'))
     name=models.CharField(max_length=255)
-    language=models.CharField(choices=LANGUAGES,max_length=50)
+    language=models.ManyToManyField("Language")
     def __str__(self) -> str:
         return self.name
 
-
+class Language(models.Model):
+    name=models.CharField(max_length=255)
+    type=models.CharField(choices=(('console','console'),('browser','browser')),max_length=255)
+    def __str__(self) -> str:
+        return self.name
 class Lesson(models.Model):
     course=models.ForeignKey(Course,on_delete=models.CASCADE,related_name="lessons")
     name=models.CharField(max_length=255)

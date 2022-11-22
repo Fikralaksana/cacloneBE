@@ -1,10 +1,15 @@
-from .models import Course,Lesson,Code,Owner
+from .models import Course,Lesson,Code,Owner,Language
 from django.contrib.sessions.models import Session
 from rest_framework import serializers
 
 
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ['name','type']
 
 class LessonCourseSerializer(serializers.ModelSerializer):
+    language=LanguageSerializer(many=True,read_only=True)
     class Meta:
         model = Course
         fields = ['id','name','language']

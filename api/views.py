@@ -33,7 +33,6 @@ class LessonViewSet(viewsets.ModelViewSet):
     serializer_class = LessonSerializer
 
 class CodeView(View):
-    @method_decorator(xframe_options_sameorigin)
     def get(self,request:Request,lesson,format=None):
         if not request.session or not request.session.session_key:
             request.session.save()
@@ -42,9 +41,9 @@ class CodeView(View):
         file=BytesIO(b"halooo")
         owner=owner_qset.last()
         lessons_qset=owner.codes.filter(lesson__id=lesson)
-        if Lesson.objects.filter(id=lesson).first().course.language in settings.USING_CONSOLE:
+        if Lesson.objects.filter(id=lesson).first().course.language.first().type:
             file.name="main.py"
-        elif Lesson.objects.filter(id=lesson).first().course.language in settings.USING_BROWSER:
+        elif Lesson.objects.filter(id=lesson).first().course.language.first().type:
             file.name="index.html"
         file=File(file)
         if len(lessons_qset)==0:   
@@ -71,10 +70,10 @@ class CodeViewSet(viewsets.ModelViewSet):
         if request.method=="PATCH":
             code=self.get_object()
             path=code.code.path
-            if code.lesson.course.language in settings.USING_CONSOLE:
+            if code.lesson.course.language.first().type=='console':
                 shell=subprocess.run(["python",path],capture_output=True)
                 response.data['output']=shell.stdout
-            elif code.lesson.course.language in settings.USING_BROWSER:
+            elif code.lesson.course.language.first().type=='browser':
                 response.data['output']=code.code.url
         return super().finalize_response(request, response, *args, **kwargs)
 
